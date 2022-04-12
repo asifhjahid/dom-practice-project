@@ -7,10 +7,10 @@ function loadMilestones(){
 
     milestones.innerHTML = `${milestonesData.map((milestone)=>{
         return (
-            `   <div class="milestone border-b">
+            `   <div class="milestone border-b" id='${milestone._id}'>
             <div class="flex">
-              <div class="checkbox"><input type="checkbox" /></div>
-              <div onclick='openMilestone(this)'>
+              <div class="checkbox"><input type="checkbox" onclick='markMileStone(this, ${milestone._id})' /></div>
+              <div onclick='openMilestone(this, ${milestone._id})'>
                 <p>
                   ${milestone.name}
                   <span><i class="fas fa-chevron-down"></i></span>
@@ -33,7 +33,7 @@ function loadMilestones(){
     }).join('')}`
 }
 
-function openMilestone(milestoneElement){
+function openMilestone(milestoneElement,id){
     const currentElement = milestoneElement.parentNode.nextElementSibling;
     const shownElement = document.querySelector('.show');
     const active = document.querySelector('.active');
@@ -50,6 +50,42 @@ function openMilestone(milestoneElement){
 
 
     currentElement.classList.toggle('show');
+    
+
+    showMilestone(id);
 }
 
+function showMilestone(id){
+  const milestoneImage = document.querySelector('.milestoneImage');
+  const milestoneName = document.querySelector('.title');
+  const milestoneDesc = document.querySelector('.desc');
+
+  milestoneImage.style.opacity='0';
+  milestoneImage.src = milestonesData[id].image;
+  milestoneName.innerText = milestonesData[id].name;
+  milestoneDesc.innerText = milestonesData[id].description;
+
+}
+
+const milestoneImage = document.querySelector('.milestoneImage');
+
+milestoneImage.onload = function(){
+  this.style.opacity = '1'
+}
+
+
+function markMileStone (checkbox,id){
+  const markMilestoneList = document.querySelector('.milestones');
+  const doneList = document.querySelector('.doneList');
+
+  const markItem = document.getElementById(id)
+
+  if(checkbox.checked){
+    markMilestoneList.removeChild(markItem);
+    doneList.appendChild(markItem)
+  }else{
+    markMilestoneList.appendChild(markItem);
+    doneList.removeChild(markItem);
+  }
+}
 loadMilestones();
